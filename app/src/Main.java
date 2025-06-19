@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        createFile();
+        File data = createFile();
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Input date of refueling: ");
@@ -22,7 +22,7 @@ public class Main {
         double fuelConsumption = (fuel / distance) * 100;
         fuelConsumption = Math.round((fuelConsumption * 100.0) / 100.0);
 
-        
+
     }
 
     public static LocalDate inputDate(String dateString) {
@@ -34,15 +34,15 @@ public class Main {
         } catch (DateTimeParseException e) {
             System.out.println("Invalid date format. Please use dd.MM.yyyy.");
         }
-
         return date;
     }
 
-    public static void createFile(){
+    public static File createFile(){
         try{
             File data = new File("fuel_consumption.txt");
             if(data.createNewFile()){
                 System.out.println("File created!");
+                return data;
             }else{
                 System.out.println("File already exist.");
             }
