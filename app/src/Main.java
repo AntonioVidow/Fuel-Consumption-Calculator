@@ -23,17 +23,25 @@ public class Main {
         System.out.println("Input the amount of fuel you refilled: ");
         double fuel = sc.nextDouble();
         double fuelConsumption = (fuel / distance) * 100;
-        fuelConsumption = Math.round((fuelConsumption * 100.0) / 100.0);
-        System.out.println(fuelConsumption);
-        String toBeWritten = fuelConsumption + " : " + date;
+        String formatedFuelConsumption = String.format("%.2f", fuelConsumption);
+        String toBeWritten = formatedFuelConsumption + " : " + date;
 
-        ArrayList<String> readData = readFile(data);
+        ArrayList<Double> fuelToAverage = new ArrayList<>();
+        double averageFuelConsumption = 0;
+        double sum = 0;
+        ArrayList<String> readData = readFile(data, fuelToAverage);
         boolean flag = readData.isEmpty();
         if(flag){
             writeFile(data, toBeWritten, flag);
         }else{
             System.out.println(readData);
+            for (double a: fuelToAverage) {
+                sum += a;
+            }
+            averageFuelConsumption = sum / fuelToAverage.size();
+            String formatedAverageConsumption = String.format("%.2f", averageFuelConsumption);
             writeFile(data, toBeWritten, flag);
+
         }
     }
 
@@ -65,12 +73,16 @@ public class Main {
         return data;
     }
 
-    public static ArrayList<String> readFile(File file){
+    public static ArrayList<String> readFile(File file, ArrayList<Double> allfuel){
         ArrayList<String> done = new ArrayList<>();
         try{
             Scanner reader = new Scanner(file);
             while(reader.hasNextLine()){
-                done.add(reader.nextLine());
+                String line = reader.nextLine();
+                done.add(line);
+                String fuelOfLine = line.substring(0, 4);
+                double fuel = Double.parseDouble(fuelOfLine);
+                allfuel.add(fuel);
             }
             reader.close();
         }catch(IOException e){
